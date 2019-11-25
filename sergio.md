@@ -294,13 +294,13 @@ For production use you may want to install Apache or Nginx and point it to the b
 Anyways, here is the command to run the web server software. This will run the web server on the build folder. 
 
 ```
-serve -s build
+serve -s build &
 ```
 
 You should now see your site running at http://IP-ADDRESS:5000. To have it just work at the root of your IP Address or domain name you'll need to run the serve command like the following ...
 
 ```
-serve -l 80 -s build
+serve -l 80 -s build &
 ```
 
 This will tell it to use port 80 which is the default web port that browser use.
