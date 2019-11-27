@@ -1,6 +1,6 @@
 # Gnoll Code Snippets
 
-The following code snippets are just blocks of code I found or created that I wanted to remember. This page is primarily used as a reference for me but if you find any code useful then I am glad. :)
+The following code snippets are just blocks of code I found or created which I wanted to remember. This page is primarily used as a reference for me but if you find any of the code useful then I am glad. Have a good day. :)
 
 ## Cleos Command to Call Contract Function
 
