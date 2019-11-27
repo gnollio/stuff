@@ -2,7 +2,7 @@
 
 The following code snippets are just blocks of code I found or created which I wanted to remember. This page is primarily used as a reference for me but if you find any of the code useful then I am glad. Have a good day. :)
 
-## Cleos Command to Call Contract Function
+## CLI : Cleos Command to Call Contract Function
 
 You have to unlock wallet first.
 
@@ -10,7 +10,23 @@ You have to unlock wallet first.
 cleos -u API_ENDPOINT push action ACCOUNT_NAME upsert "[\"PARAM_1\",\"PARAM_2\"]" -p ACCOUNT_NAME@active
 ```
 
-## Vanilla JS to Pull Table Row from DAPP Network
+## C++ : Action w/ Auto-Increment Key
+
+```
+ACTION classname::functionname(name from) {
+  require_auth(from);
+
+  // init table
+  stuff_table _stuff(get_self(), get_self().value);
+
+  // create wager record
+  _stuff.emplace(from, [&](auto& row) {
+    row.id = _stuff.available_primary_key();
+  });
+}
+```
+
+## Vanilla JS :  to Pull Table Row from DAPP Network
 
 ```
 fetch('https://kylin-dsp-2.liquidapps.io/v1/dsp/ipfsservice1/get_table_row', {
@@ -30,23 +46,7 @@ fetch('https://kylin-dsp-2.liquidapps.io/v1/dsp/ipfsservice1/get_table_row', {
 }).then(response => { console.log(response.json()) })
 ```
 
-## C++ Action w/ Auto-Increment Key
-
-```
-ACTION classname::functionname(name from) {
-  require_auth(from);
-
-  // init table
-  stuff_table _stuff(get_self(), get_self().value);
-
-  // create wager record
-  _stuff.emplace(from, [&](auto& row) {
-    row.id = _stuff.available_primary_key();
-  });
-}
-```
-
-## Chess Board Array [['a1','a2'...],['b1','b2',...]...]
+## Vanilla JS : Chess Board Array [['a1','a2'...],['b1','b2',...]...]
 
 ```
 // multi-dim array
