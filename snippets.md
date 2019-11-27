@@ -30,6 +30,22 @@ fetch('https://kylin-dsp-2.liquidapps.io/v1/dsp/ipfsservice1/get_table_row', {
 }).then(response => { console.log(response.json()) })
 ```
 
+## C++ Action w/ Auto-Increment Key
+
+```
+ACTION classname::functionname(name from) {
+  require_auth(from);
+
+  // init table
+  stuff_table _stuff(get_self(), get_self().value);
+
+  // create wager record
+  _stuff.emplace(from, [&](auto& row) {
+    row.id = _stuff.available_primary_key();
+  });
+}
+```
+
 ## Chess Board Array [['a1','a2'...],['b1','b2',...]...]
 
 ```
