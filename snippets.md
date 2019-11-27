@@ -10,7 +10,7 @@ You have to unlock wallet first.
 cleos -u API_ENDPOINT push action ACCOUNT_NAME upsert "[\"PARAM_1\",\"PARAM_2\"]" -p ACCOUNT_NAME@active
 ```
 
-## Vanilla JS to Pull Table Rows from DAPP Network
+## Vanilla JS to Pull Table Row from DAPP Network
 
 ```
 fetch('https://kylin-dsp-2.liquidapps.io/v1/dsp/ipfsservice1/get_table_row', {
