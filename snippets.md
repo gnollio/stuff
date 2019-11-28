@@ -50,9 +50,9 @@ async function connectToWallet () {
 // wait for results
 connectToWallet().then(() => {
   alert('Wallet found!')
- }).catch(e => {
+}).catch(e => {
   alert('Could not connect to a wallet.')
- })
+})
 ```
 
 ## C++ : Action w/ Auto-Increment Key
