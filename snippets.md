@@ -71,6 +71,34 @@ ACTION classname::functionname(name from) {
 }
 ```
 
+## C++ : Time Since X Validation
+
+```
+// Original author @theblockstalk
+// Modified for convenience
+
+TABLE data {
+  name    user;
+  time_point last_updated;
+  auto primary_key() const { return user.value; }
+};
+typedef multi_index<name("data"), data> data_table;
+
+ACTION theclass::thefunction(name from) {
+  data_table _data(get_self(), get_self().value);
+
+  // remove record if added within 1 hour
+  auto data_itr = _data.find(from.value);
+  if (data_itr != _data.end()) {
+    const time_point now = current_time_point();
+    const time_point last_updated = data_itr->last_updated;
+    const uint32_t elapsed_time_sec = now.sec_since_epoch() - last_updated.sec_since_epoch();
+    check(elapsed_time_sec < (60 * 60), "Record was not added within 1 hour");
+    data_itr = _data.erase(data_itr);
+  }
+}
+```
+
 ## Vanilla JS :  to Pull Table Row from DAPP Network
 
 ```
