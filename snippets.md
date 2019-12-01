@@ -19,40 +19,134 @@ yarn add eosjs@beta eos-transit eos-transit-scatter-provider
 ```
 import { initAccessContext } from 'eos-transit'
 import scatter from 'eos-transit-scatter-provider'
-...
 
-const accessContext = initAccessContext({
-  appName: 'my_first_dapp',
-  network: {
-    host: 'api.pennstation.eosnewyork.io',
-    port: 7001,
-    protocol: 'http',
-    chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f'
-  },
-  walletProviders: [
-    scatter()
-  ]
-})
+export default class Blockchain {
+  constructor () {
+    this.accessContext = false
+    this.walletProviders = false
+    this.selectedProvider = false
+    this.wallet = false
+    this.locked = false
 
-const walletProviders = accessContext.getWalletProviders()
+    this.name = false
+    this.authorization = false
+  }
 
-// grab first wallet available in list
-const selectedProvider = walletProviders[0]
+  setup (network) {
+    let config = false
+    switch (network) {
+      case 'eos':
+        config = {
+          appName: 'EOSMainDfuse',
+          network: {
+            blockchain: 'eos',
+            chainId: 'aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906',
+            host: 'mainnet.eos.dfuse.io/',
+            port: 443,
+            protocol: 'https'
+          },
+          walletProviders: [
+            scatter()
+          ]
+        }
+        break
+      case 'jungle':
+        config = {
+          appName: 'EOSJungleDfuse',
+          network: {
+            blockchain: 'eos',
+            chainId: 'e70aaab8997e1dfce58fbfac80cbbb8fecec7b99cf982a9444273cbc64c41473',
+            host: 'jungle.eos.dfuse.io/',
+            port: 443,
+            protocol: 'https'
+          },
+          walletProviders: [
+            scatter()
+          ]
+        }
+        break
+      case 'telos':
+        config = {
+          appName: 'TelosFoundation',
+          network: {
+            blockchain: 'eos',
+            chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f',
+            host: 'api.telosfoundation.io',
+            port: 443,
+            protocol: 'https'
+          },
+          walletProviders: [
+            scatter()
+          ]
+        }
+        break
+      default:
+        config = {
+          appName: 'LocalNodeos',
+          network: {
+            blockchain: 'eos',
+            chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f',
+            host: 'localhost',
+            port: 8888,
+            protocol: 'http'
+          },
+          walletProviders: [
+            scatter()
+          ]
+        }
+    }
+    this.accessContext = initAccessContext(config)
+    this.walletProviders = this.accessContext.getWalletProviders()
+  }
 
-// select wallet and init
-const wallet = accessContext.initWallet(selectedProvider)
+  selectWallet (index) {
+    this.selectedProvider = this.walletProviders[index]
+    this.wallet = this.accessContext.initWallet(this.selectedProvider)
+  }
 
-// function to connect to wallet
-async function connectToWallet () {
-  await wallet.connect()
+  connect (success = () => {}, failure = () => {}) {
+    let main = this
+    if (main.locked) return
+
+    async function connectWallet () {
+      main.locked = true
+      await main.wallet.connect()
+    }
+
+    connectWallet().then((res) => {
+      main.locked = false
+      success(res)
+    }).catch(e => {
+      main.locked = false
+      failure(e)
+    })
+  }
+
+  async login (success = () => {}, failure = () => {}, notConnected = () => {}) {
+    let main = this
+    if (main.wallet.connected === true) {
+      let discoveryData = await main.wallet.discover({ pathIndexList: [ 0, 1, 2, 3 ] })
+      if (discoveryData.keyToAccountMap.length > 0) {
+        // await wallet.login(accountName, authorization)
+        alert('You have more than one account. Insert code.')
+      } else {
+        try {
+          await main.wallet.login()
+          success()
+        } catch (e) {
+          notConnected(e)
+        }
+      }
+    } else {
+      notConnected()
+    }
+  }
+
+  async logout (cb = () => {}) {
+    await this.wallet.terminate()
+    cb()
+  }
 }
-
-// wait for results
-connectToWallet().then(() => {
-  alert('Wallet found!')
-}).catch(e => {
-  alert('Could not connect to a wallet.')
-})
 ```
 
 ## C++ : Action w/ Auto-Increment Key
